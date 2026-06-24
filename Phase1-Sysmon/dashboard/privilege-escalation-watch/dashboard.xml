@@ -1,0 +1,66 @@
+<dashboard version="1.1">
+  <label>Privilege Escalation Watch</label>
+  <description>Monitor privilege escalation and token elevation events</description>
+  
+  <row>
+    <panel>
+      <title>Privilege Escalation Events (24h)</title>
+      <single>
+        <search>
+          <query>index=endpoint EventCode=4672 | stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="rangeColors">["0x65A637","0xF7BC38","0xD93F3C"]</option>
+        <option name="rangeValues">[0,10,25]</option>
+        <option name="underLabel">Elevation Events</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <title>Non-Admin Privilege Elevation Attempts</title>
+      <single>
+        <search>
+          <query>index=endpoint EventCode=4672 | where SubjectUserName!="Administrator" AND SubjectUserName!="SYSTEM" | stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="rangeColors">["0x65A637","0xF7BC38","0xD93F3C"]</option>
+        <option name="rangeValues">[0,5,15]</option>
+        <option name="underLabel">Suspicious Elevations</option>
+      </single>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Privilege Escalation Timeline</title>
+      <chart>
+        <search>
+          <query>index=endpoint EventCode=4672 | timechart count by SubjectUserName limit=5</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">column</option>
+      </chart>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Privilege Elevation Details (Non-Admin Users)</title>
+      <table>
+        <search>
+          <query>index=endpoint EventCode=4672 | where SubjectUserName!="Administrator" AND SubjectUserName!="SYSTEM" | fields _time, Computer, SubjectUserName, LogonId, PrivilegeList | sort - _time</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

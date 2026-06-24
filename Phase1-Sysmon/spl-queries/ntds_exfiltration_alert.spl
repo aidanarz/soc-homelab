@@ -1,0 +1,2 @@
+index=endpoint EventCode=1 CommandLine="*ntdsutil*" OR CommandLine="*vssadmin*"
+| table _time, User, CommandLine

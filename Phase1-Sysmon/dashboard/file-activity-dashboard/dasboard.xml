@@ -1,0 +1,49 @@
+<dashboard version="1.1">
+  <label>File Activity Dashboard</label>
+  <description>Monitor file creation and modifications in critical directories</description>
+  
+  <row>
+    <panel>
+      <title>File Creation Timeline</title>
+      <chart>
+        <search>
+          <query>index=endpoint EventCode=11 | eval file_dir=case(match(TargetFilename, ".*\\\\Windows\\\\System32\\\\.*"), "System32", match(TargetFilename, ".*\\\\Program Files.*"), "Program Files", 1=1, "Other") | timechart count by file_dir limit=4</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">line</option>
+      </chart>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Suspicious File Creation (Critical Directories)</title>
+      <table>
+        <search>
+          <query>index=endpoint EventCode=11 | where match(TargetFilename, ".*\\\\Windows\\\\(System32|SysWOW64)\\\\.*") OR match(TargetFilename, ".*\\\\Program Files.*") | fields _time, Computer, Image, TargetFilename, User | sort - _time</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>File Extension Analysis</title>
+      <chart>
+        <search>
+          <query>index=endpoint EventCode=11 | eval file_ext=case(match(TargetFilename, ".*\\.exe$"), ".exe", match(TargetFilename, ".*\\.dll$"), ".dll", match(TargetFilename, ".*\\.sys$"), ".sys", match(TargetFilename, ".*\\.bat$"), ".bat", match(TargetFilename, ".*\\.ps1$"), ".ps1", 1=1, "Other") | stats count by file_ext | sort - count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">bar</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>

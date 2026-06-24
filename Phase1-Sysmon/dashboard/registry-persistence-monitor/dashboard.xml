@@ -1,0 +1,50 @@
+<dashboard version="1.1">
+  <label>Registry Persistence Monitor</label>
+  <description>Detect suspicious registry modifications indicative of persistence</description>
+  
+  <row>
+    <panel>
+      <title>Suspicious Registry Modifications Count</title>
+      <single>
+        <search>
+          <query>index=endpoint EventCode=13 | eval registry_path=TargetObject | where match(registry_path, ".*\\\\Run\\\\.*") OR match(registry_path, ".*\\\\RunOnce\\\\.*") | stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="rangeColors">["0x65A637","0xF7BC38","0xD93F3C"]</option>
+        <option name="rangeValues">[0,5,20]</option>
+        <option name="underLabel">Registry Modifications</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <title>Registry Modification Type Breakdown</title>
+      <chart>
+        <search>
+          <query>index=endpoint EventCode=13 | eval reg_type=case(match(TargetObject, ".*\\\\Run\\\\.*"), "Run Key", match(TargetObject, ".*\\\\RunOnce\\\\.*"), "RunOnce Key", match(TargetObject, ".*\\\\Services\\\\.*"), "Services Key", 1=1, "Other") | where reg_type!="Other" | stats count by reg_type</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Run Key Modifications (Persistence Indicator)</title>
+      <table>
+        <search>
+          <query>index=endpoint EventCode=13 TargetObject="*\\Run\\*" OR TargetObject="*\\RunOnce\\*" | fields _time, Computer, Image, User, TargetObject, Details | sort - _time</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="count">25</option>
+        <option name="drilldown">row</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

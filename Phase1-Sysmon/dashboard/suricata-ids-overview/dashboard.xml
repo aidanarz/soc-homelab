@@ -1,0 +1,62 @@
+<dashboard version="1.1" theme="dark">
+  <label>Suricata IDS Overview</label>
+  <row>
+    <panel>
+      <title>Traffic Timeline</title>
+      <chart>
+        <search>
+          <query>index=suricata 
+| timechart count span=1h</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Alert Severity Distribution</title>
+      <chart>
+        <search>
+          <query>index=suricata 
+| stats count by alert.severity</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Top Attack Signatures</title>
+      <chart>
+        <search>
+          <query>index=suricata 
+| stats count by alert.signature
+| sort -count
+| head 10</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.drilldown">none</option>
+        <option name="height">515</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>High-Severity Alerts</title>
+      <table>
+        <search>
+          <query>index=suricata alert.severity&gt;=3
+| stats count by alert.signature, src_ip, dest_ip
+| sort -count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

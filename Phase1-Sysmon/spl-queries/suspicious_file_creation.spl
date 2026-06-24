@@ -1,0 +1,3 @@
+index=endpoint EventCode=11
+| where match(TargetFilename,"\.(exe|bat|ps1|vbs)$")
+| table _time, Image, TargetFilename

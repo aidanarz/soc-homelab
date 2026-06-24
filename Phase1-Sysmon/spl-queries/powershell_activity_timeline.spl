@@ -1,0 +1,2 @@
+index=endpoint Image="*powershell.exe" 
+| stats count by User CommandLine

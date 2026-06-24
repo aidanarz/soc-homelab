@@ -1,0 +1,77 @@
+<dashboard version="1.1">
+  <label>Full Incident Response Dashboard</label>
+  <description>Executive summary with KPIs and detailed investigation view</description>
+  
+  <row>
+    <panel>
+      <title>🚨 Total Security Events (24h)</title>
+      <single>
+        <search>
+          <query>index=endpoint | stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="underLabel">Total Events</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <title>Critical Events</title>
+      <single>
+        <search>
+          <query>index=endpoint (EventCode=10 OR EventCode=4672) | stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="rangeColors">["0x65A637","0xD93F3C"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="underLabel">Critical Alerts</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <title>Affected Hosts</title>
+      <single>
+        <search>
+          <query>index=endpoint | stats dc(Computer)</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="underLabel">Unique Hosts</option>
+      </single>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Event Timeline (24h)</title>
+      <chart>
+        <search>
+          <query>index=endpoint | timechart count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">area</option>
+      </chart>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <title>Event Types Distribution</title>
+      <chart>
+        <search>
+          <query>index=endpoint | eval event_name=case(EventCode=1, "Process Creation", EventCode=3, "Network Connection", EventCode=10, "Process Access", EventCode=11, "File Created", EventCode=13, "Registry Modified", 1=1, "Other") | stats count by event_name | sort - count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <refresh>5m</refresh>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
