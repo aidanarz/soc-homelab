@@ -1,0 +1,29 @@
+# Nmap Scan 
+alert tcp any any -> $HOME_NET any (msg:"CUSTOM Nmap SYN Scan Detected"; flags:S, 12; flow:to_server; threshold:type both, track by_src, count 20, seconds 5; sid:20260601; rev:2;)
+
+# Ping Flood
+alert icmp any any -> $HOME_NET any (msg:"CUSTOM Ping Flood Detected"; itype:8; threshold:type both, track by_src, count 20, seconds 10; classtype:attempted-dos; sid:20260602; rev:1;)
+
+# Oversize HTTP GET Request
+alert http any any -> $HOME_NET any (msg:"CUSTOM Oversized HTTP GET Request"; flow:to_server,established; http.method; content:"GET"; http.uri; byte_test:2,>,500,0,relative; classtype:attempted-recon; sid:20260603; rev:1;)
+
+# FTP Brute Force
+alert tcp any any -> $HOME_NET 21 (msg:"CUSTOM FTP Brute Force Attempt"; flags:S; threshold:type both, track by_src, count 10, seconds 30; classtype:attempted-admin; sid:20260704; rev:1;)
+
+# Telnet Connection Attempt
+alert tcp any any -> $HOME_NET 23 (msg:"CUSTOM Telnet Connection Attempt"; flags:S; classtype:attempted-admin; sid:20260605; rev:1;)
+
+# HTTP with "admin" in URI
+alert http any any -> $HOME_NET any (msg:"CUSTOM Admin Panel Scanning Detected"; flow:to_server,established; http.uri; content:"/admin"; nocase; classtype:web-application-attack; sid:20260606; rev:1;)
+
+# SQL Injection Attempt Pattern
+alert http any any -> $HOME_NET any (msg:"CUSTOM SQL Injection Pattern Detected"; flow:to_server,established; http.uri; content:"' OR "; nocase; classtype:web-application-attack; sid:20260607; rev:1;)
+
+# Uncommon HTTP Method
+alert http any any -> $HOME_NET any (msg:"CUSTOM Uncommon HTTP Method Detected"; flow:to_server,established; http.method; content:"PUT"; nocase; classtype:attempted-recon; sid:20260608; rev:1;)
+
+# Susipcious User-Agent
+alert http any any -> $HOME_NET any ( msg:"CUSTOM Suspicious User-Agent Detected"; flow:to_server,established; http.user_agent; content:"curl"; nocase; classtype:attempted-recon; sid:20260609; rev:1;)
+
+# DNS Query to Suspicious Domain
+alert dns $HOME_NET any -> any 53 (msg:"CUSTOM Suspicious DNS Query - Test Domain"; dns_query; content:"malware.test"; nocase; classtype:bad-unknown; sid:20260610; rev:1;)
