@@ -12,7 +12,7 @@
 OS: Windows 10 21H2
 RAM: 4GB
 Storage: 30GB
-Network: Bridged
+Network: NAT
 
 # After install:
 1. Install Sysmon
@@ -24,7 +24,7 @@ Network: Bridged
 ```bash
 RAM: 8GB
 Storage: 50GB
-Network: Bridged
+Network: NAT
 
 # After install:
 1. Install Splunk Enterprise
@@ -40,8 +40,8 @@ Network: Bridged
 
 # After install:
 1. Setup Active Directory
-2. Create domain: corp.local
-3. Create 2 domain users
+2. Create domain: yourdomain.local
+3. Create 2 or more domain users in different distribution groups
 ```
 
 ### VM 4: Kali Linux (Attacker)
@@ -57,13 +57,12 @@ Storage: Existing Kali installation
 ```
 
 ## Network Configuration
-[Diagram showing IP ranges and connectivity]
 
 All VMs on same internal network: 192.168.10.0/24
-- Kali: 192.168.10.10
-- Windows 10: 192.168.10.100
-- Windows Server: 192.168.10.200
-- Ubuntu: 192.168.10.50
+- Kali: 192.168.110.133
+- Windows 10: 192.168.110.100
+- Windows Server: 192.168.110.132
+- Ubuntu: 192.168.110.131
 
 ## Step 1: Sysmon Installation (Windows 10)
 
@@ -83,25 +82,25 @@ cd Sysmon
 ## Step 2: Splunk Forwarder (Windows 10)
 
 ```bash
-[See /documentation/vm-setup/windows10-setup.md]
+tba
 ```
 
 ## Step 3: Splunk Enterprise (Ubuntu)
 
 ```bash
-[See /documentation/vm-setup/ubuntu-setup.md]
+tba
 ```
 
 ## Step 4: Suricata Installation (Ubuntu)
 
 ```bash
-[See /documentation/vm-setup/ubuntu-setup.md - Suricata section]
+tba
 ```
 
 ## Step 5: Import Detection Rules
 
 ### Sysmon Rules
-1. Go to Splunk web UI: http://192.168.10.50:8000
+1. Go to Splunk web UI: http://192.168.110.131:8000
 2. Settings → Searches, Reports, and Alerts
 3. Import: `/phase1-endpoint-detection/sysmon-rules/*.spl`
 
@@ -119,12 +118,3 @@ nmap -sS -p 1-100 192.168.10.100
 # Check Splunk for alerts
 # Check Suricata for alerts
 ```
-
-## Verification Checklist
-- [ ] Sysmon running on Windows 10
-- [ ] Splunk receiving Sysmon events
-- [ ] Suricata running on Ubuntu
-- [ ] Splunk receiving EVE JSON from Suricata
-- [ ] First nmap test generates alerts in both sources
-
-See troubleshooting in TROUBLESHOOTING.md if issues arise.

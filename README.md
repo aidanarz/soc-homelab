@@ -3,26 +3,21 @@
 ## Overview
 This repository contains a comprehensive Security Operations Center (SOC) lab demonstrating 
 real-world threat detection across two layers:
-- **Phase 1:** Endpoint Detection (Sysmon + Splunk)
+- **Phase 1:** Endpoint Detection (Sysmon + Active Directory + Splunk)
 - **Phase 2:** Network IDS (Suricata + Splunk correlation)
-
-## Key Metrics
-- **Detection Rules Created:** 21 (14 Sysmon + 7 Suricata)
-- **MITRE ATT&CK Techniques Detected:** 14 techniques across 6 phases
-- **Attack Simulations:** 14+ real scenarios with 100% detection rate
-- **Lab VMs:** 4 (Windows 10, Windows Server 2022 AD, Ubuntu 22.04, Kali Linux)
 
 
 ## Architecture
-[Embed simple ASCII diagram or image]
+<img width="763" height="1029" alt="WhatsApp Image 2026-06-21 at 17 56 11" src="https://github.com/user-attachments/assets/d23f8a4c-53cb-4c05-98ed-f8e8f4fbe4a4" />
+
 
 ## Phases
 
 ### Phase 1: Endpoint Detection
 - Sysmon telemetry collection (process, file, registry, network events)
 - 6 SPL detection rules in Splunk
-- 8 custom dashboards for visualization
-- Coverage: Reconnaissance, Execution, Persistence, Privilege Escalation, Credential Access, Lateral Movement
+- 6 custom dashboards for visualization
+- Coverage: Execution, Persistence, Privilege Escalation, Credential Access
 
 ### Phase 2: Network IDS
 - Suricata network-based detection
@@ -37,30 +32,13 @@ real-world threat detection across two layers:
 | PowerShell | T1059.001 | Sysmon + Suricata | Process Execution Timeline |
 | ... | ... | ... | ... |
 
-[Full table in MITRE-MAPPING.md]
+[Full table in MITRE-ATT&CK-Mapping.xlsx]
 
 ## Features
 ✅ Production-grade SIEM (Splunk Enterprise)
 ✅ Real-time network monitoring (Suricata IDS)
 ✅ Windows Active Directory integration
-✅ 21 custom detection rules
-✅ Automated attack simulations
-✅ Complete documentation + runbooks
 ✅ Evidence screenshots for all detections
-
-## Lab Requirements
-- Virtualization: VirtualBox / Hyper-V
-- Storage: ~100GB free space
-- RAM: 16GB+ recommended
-- Network: Internal bridged network
-
-## Files
-- `SETUP.md` - Step-by-step lab setup
-- `ARCHITECTURE.md` - Detailed system design
-- `MITRE-MAPPING.md` - Rule to technique mapping
-- `/phase1-endpoint-detection/` - Sysmon rules + dashboards
-- `/phase2-network-detection/` - Suricata rules + config
-- `/documentation/` - Comprehensive guides
 
 ## Acknowledgments
 - MITRE ATT&CK Framework
