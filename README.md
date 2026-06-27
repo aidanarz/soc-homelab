@@ -1,4 +1,4 @@
-# SOC Lab: Multi-Layer Threat Detection System
+# SOC HomeLab
 
 ## Overview
 This repository contains a comprehensive Security Operations Center (SOC) lab demonstrating 
