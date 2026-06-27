@@ -8,7 +8,8 @@ real-world threat detection across two layers:
 
 
 ## Architecture
-<img width="763" height="1029" alt="WhatsApp Image 2026-06-21 at 17 56 11" src="https://github.com/user-attachments/assets/d23f8a4c-53cb-4c05-98ed-f8e8f4fbe4a4" />
+<img width="763" height="959" alt="image" src="https://github.com/user-attachments/assets/1a08ac6e-db49-4d83-8a40-660aebdf336d" />
+
 
 
 ## Phases
@@ -26,13 +27,13 @@ real-world threat detection across two layers:
 - Real-time alert generation and investigation workflows
 
 ## MITRE ATT&CK Coverage
-| Technique | ID | Detection Method | Dashboard |
-|-----------|----|--------------------|-----------|
-| Network Service Discovery | T1046 | Suricata (nmap SYN) | Port Scan Monitor |
-| PowerShell | T1059.001 | Sysmon + Suricata | Process Execution Timeline |
-| ... | ... | ... | ... |
+| Technique ID | Technique Name | Phase | Detection Type | Category |
+|---|---|---|---|---|
+| T1003.003 | NTDS Dump | 1 | Sysmon Process | Credential Access |
+| T1046 | Network Service Discovery | 1, 2 | Sysmon + Suricata | Discovery/Reconnaissance |
+| ... | ... | ... | ... | ... |
 
-[Full table in MITRE-ATT&CK-Mapping.xlsx]
+[Full table in MITRE-ATT&CK-Mapping.md]
 
 ## Features
 ✅ Production-grade SIEM (Splunk Enterprise)
